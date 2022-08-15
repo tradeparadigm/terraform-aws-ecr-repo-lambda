@@ -1,0 +1,32 @@
+exclude: >
+    (?x)(
+        \.git|
+        \.terraform
+    )
+default_stages: [commit]
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.0.1
+  hooks:
+  - id: check-merge-conflict
+  - id: end-of-file-fixer
+  - id: trailing-whitespace
+- repo: https://github.com/psf/black
+  rev: 22.3.0
+  hooks:
+  - id: black
+    args:
+    - --exclude='\.git'
+    - --include='\.pyi?$'
+    - --target-version=py310
+    - --line-length=99
+- repo: https://gitlab.com/pycqa/flake8
+  rev: 4.0.1
+  hooks:
+  - id: flake8
+    additional_dependencies: [flake8-isort]
+- repo: https://github.com/antonbabenko/pre-commit-terraform
+  rev: v1.73.0
+  hooks:
+  - id: terraform_fmt
+  - id: terraform_docs
