@@ -13,7 +13,7 @@ For example:
 
 ```hcl
 module "lambda" {
-  source = "tradeparadigm/aws/ecr-repo-lambda"
+  source = "tradeparadigm/ecr-repo-lambda/aws"
 
   managed_repo_prefixes = [
     "backend/",
