@@ -4,7 +4,7 @@
 This module manages AWS Lambda which creates private ECR repositories
 whenever an attempt to push to a non-existing repository is logged in
 CloudTrail. Since `docker push` attempt five times, the repository will
-be created before all retry attempts exhaused, if lambda is working
+be created before all retry attempts exhausted, if lambda is working
 correctly 😉.
 
 ## Usage
@@ -64,7 +64,7 @@ module "lambda" {
 | <a name="input_log_retention_days"></a> [log_retention_days](#input_log_retention_days) | Number of days to retain AWS Lambda logs. Possible values are: 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653, and 0. If you select 0, the events in the log group are always retained and never expire. | `number` | `14` | no |
 | <a name="input_managed_repo_prefixes"></a> [managed_repo_prefixes](#input_managed_repo_prefixes) | List of managed ECR repo prefixes Lambda can create repos for. | `list(string)` | `[]` | no |
 | <a name="input_name"></a> [name](#input_name) | AWS Lambda name. Region will be appended as suffix: `<name>-<aws_region>`. | `string` | `"create-ecr-repo"` | no |
-| <a name="input_repo_lifecycle_policy"></a> [repo_lifecycle_policy](#input_repo_lifecycle_policy) | ECR repository policy added to every repo Lambda creates. | `string` | `"{\n  \"rules\": [\n    {\n      \"rulePriority\": 10,\n      \"description\": \"Only keep 20 most recent untagged images.\",\n      \"selection\": {\n        \"tagStatus\": \"untagged\",\n        \"countType\": \"imageCountMoreThan\",\n        \"countNumber\": 20\n      },\n      \"action\": {\n        \"type\": \"expire\"\n      }\n    }\n}\n"` | no |
+| <a name="input_repo_lifecycle_policy"></a> [repo_lifecycle_policy](#input_repo_lifecycle_policy) | ECR repository policy added to every repo Lambda creates. | `string` | `"{\n  \"rules\": [\n    {\n      \"rulePriority\": 10,\n      \"description\": \"Only keep 20 most recent untagged images.\",\n      \"selection\": {\n        \"tagStatus\": \"untagged\",\n        \"countType\": \"imageCountMoreThan\",\n        \"countNumber\": 20\n      },\n      \"action\": {\n        \"type\": \"expire\"\n      }\n    }\n  ]\n}\n"` | no |
 | <a name="input_repo_scan_on_push"></a> [repo_scan_on_push](#input_repo_scan_on_push) | Toggles Scan on push on repos Lambda creates. | `bool` | `true` | no |
 | <a name="input_repo_tags"></a> [repo_tags](#input_repo_tags) | ECR repo tags added to every repo Lambda creates. | `map(string)` | `{}` | no |
 | <a name="input_tags"></a> [tags](#input_tags) | Tags to apply to created AWS resources. | `map(string)` | `{}` | no |

@@ -4,7 +4,7 @@
  * This module manages AWS Lambda which creates private ECR repositories
  * whenever an attempt to push to a non-existing repository is logged in
  * CloudTrail. Since `docker push` attempt five times, the repository will
- * be created before all retry attempts exhaused, if lambda is working
+ * be created before all retry attempts exhausted, if lambda is working
  * correctly 😉.
  *
  * ## Usage
@@ -46,7 +46,7 @@ resource "aws_lambda_function" "this" {
   description      = "Creates ECR repo when push failed due to missing repo."
   role             = aws_iam_role.this.arn
   handler          = "handler.run"
-  runtime          = "python3.9"
+  runtime          = "python3.12"
   source_code_hash = data.archive_file.this.output_base64sha256
 
   reserved_concurrent_executions = var.lambda_concurrency

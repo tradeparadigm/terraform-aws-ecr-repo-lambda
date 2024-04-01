@@ -34,6 +34,7 @@ def lifecycle_policy():
         try:
             json.loads(policy)
         except ValueError as err:
+            logger.error("Failed to parse REPO_LIFECYCLE_POLICY: %s", err)
             return None
     return policy
 
@@ -45,6 +46,7 @@ def repo_tags():
         try:
             tags = [{"Key": k, "Value": v} for (k, v) in json.loads(tags_env).items()]
         except ValueError as err:
+            logger.error("Failed to parse REPO_TAGS: %s", err)
             return []
     return tags
 
