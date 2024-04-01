@@ -20,7 +20,7 @@ def get_env_var(name, optional=False):
             raise KeyError
     except KeyError:
         if optional:
-            return None
+            return ""
         logger.error("Failed to get required environment variable " + name)
         sys.exit(1)
 
@@ -80,7 +80,7 @@ def run(event, context):
 
     # don't do anything if repository exists
     if not repositories:
-        scan_on_push = bool(get_env_var(name="REPO_SCAN_ON_PUSH", optional=True))
+        scan_on_push = get_env_var(name="REPO_SCAN_ON_PUSH", optional=True).lower() == "true"
         mutability = get_env_var(name="IMAGE_TAG_MUTABILITY")
         tags = repo_tags()
         try:
