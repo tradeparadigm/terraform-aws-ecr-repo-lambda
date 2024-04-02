@@ -13,8 +13,6 @@ sections:
   hide: []
   show: []
 
-content: ""
-
 output:
   file: "README.md"
   mode: replace

@@ -40,7 +40,7 @@ variable "image_tag_mutability" {
   nullable    = false
   validation {
     condition     = contains(["MUTABLE", "IMMUTABLE"], var.image_tag_mutability)
-    error_message = "The image_tag_mutability value must be onde of \"MUTABLE\" or \"IMMUTABLE\"."
+    error_message = "The image_tag_mutability value must be one of \"MUTABLE\" or \"IMMUTABLE\"."
   }
 }
 
@@ -62,9 +62,10 @@ variable "repo_lifecycle_policy" {
             "type": "expire"
           }
         }
+      ]
     }
   DEFAULT
-  nullable    = false
+  nullable    = true
 }
 
 variable "repo_tags" {
