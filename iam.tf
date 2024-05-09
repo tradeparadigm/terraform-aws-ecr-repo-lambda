@@ -7,6 +7,7 @@ data "aws_iam_policy_document" "access" {
       "ecr:PutImageScanningConfiguration",
       "ecr:PutImageTagMutability",
       "ecr:PutLifecyclePolicy",
+      "ecr:SetRepositoryPolicy",
       "ecr:TagResource"
     ]
     resources = [
