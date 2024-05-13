@@ -107,8 +107,8 @@ def run(event, context):
                     lifecyclePolicyText=lifecycle_policy,
                 )
                 logger.info("created lifecycle_policy on %s", repository)
-        except:  # noqa: E722
-            logger.error("failed to create lifecycle_policy on %s", repository)
+        except Exception as e:  # noqa: E722
+            logger.error("failed to create lifecycle_policy on %s: %s", repository, e)
 
         try:
             if repository_policy := get_valid_json_from_env("REPO_POLICY"):
