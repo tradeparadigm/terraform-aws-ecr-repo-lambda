@@ -33,8 +33,7 @@ def get_valid_json_from_env(name, optional=True):
     Function to get json content from environment variable,
     validate them and return in marshal format.
     """
-    payload = get_env_var(name=name, optional=optional)
-    if payload:
+    if payload := get_env_var(name=name, optional=optional):
         try:
             if json.loads(payload):
                 return payload
@@ -83,9 +82,7 @@ def run(event, context):
 
     # don't do anything if repository exists
     if not repositories:
-        scan_on_push = (
-            get_env_var(name="REPO_SCAN_ON_PUSH", optional=True).lower() == "true"
-        )
+        scan_on_push = get_env_var(name="REPO_SCAN_ON_PUSH", optional=True).lower() == "true"
         mutability = get_env_var(name="IMAGE_TAG_MUTABILITY")
         tags = repo_tags()
         try:
@@ -103,8 +100,7 @@ def run(event, context):
             sys.exit(1)
 
         try:
-            lifecycle_policy = get_valid_json_from_env("REPO_LIFECYCLE_POLICY")
-            if lifecycle_policy:
+            if lifecycle_policy := get_valid_json_from_env("REPO_LIFECYCLE_POLICY"):
                 client.put_lifecycle_policy(
                     registryId=account_id,
                     repositoryName=repository,
@@ -115,8 +111,7 @@ def run(event, context):
             logger.error("failed to create lifecycle_policy on %s", repository)
 
         try:
-            repository_policy = get_valid_json_from_env("REPO_POLICY")
-            if repository_policy:
+            if repository_policy := get_valid_json_from_env("REPO_POLICY"):
                 client.set_repository_policy(
                     registryId=account_id,
                     repositoryName=repository,
@@ -124,7 +119,7 @@ def run(event, context):
                     force=False,
                 )
                 logger.info("created repository_policy on %s", repository)
-        except:  # noqa: E722
-            logger.error("failed to create repository_policy on %s", repository)
+        except Exception as e:  # noqa: E722
+            logger.error("failed to create repository_policy on %s: %s", repository, e)
 
     logger.info("lambda %s completed", context.function_name)
