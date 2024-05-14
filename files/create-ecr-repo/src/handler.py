@@ -28,27 +28,27 @@ def get_env_var(name, optional=False):
 
 
 # flake8: noqa: E501
-def lifecycle_policy():
-    policy = get_env_var(name="REPO_LIFECYCLE_POLICY", optional=True)
-    if policy:
+def get_valid_json_from_env(name, optional=True):
+    """
+    Function to get json content from environment variable,
+    validate them and return in marshal format.
+    """
+    if payload := get_env_var(name=name, optional=optional):
         try:
-            json.loads(policy)
-        except ValueError as err:
-            logger.error("Failed to parse REPO_LIFECYCLE_POLICY: %s", err)
-            return None
-    return policy
+            if json.loads(payload):
+                return payload
+        except (KeyError, ValueError) as err:
+            logger.error("Failed to parse %s: %s", name, err)
+            if not optional:
+                sys.exit(1)
+    return None
 
 
 def repo_tags():
-    tags = []
-    tags_env = get_env_var(name="REPO_TAGS", optional=True)
+    tags_env = get_valid_json_from_env(name="REPO_TAGS", optional=True)
     if tags_env:
-        try:
-            tags = [{"Key": k, "Value": v} for (k, v) in json.loads(tags_env).items()]
-        except ValueError as err:
-            logger.error("Failed to parse REPO_TAGS: %s", err)
-            return []
-    return tags
+        return [{"Key": k, "Value": v} for (k, v) in json.loads(tags_env).items()]
+    return []
 
 
 def is_managed_repo(repo):
@@ -100,15 +100,26 @@ def run(event, context):
             sys.exit(1)
 
         try:
-            policy = lifecycle_policy()
-            if policy:
+            if lifecycle_policy := get_valid_json_from_env("REPO_LIFECYCLE_POLICY"):
                 client.put_lifecycle_policy(
                     registryId=account_id,
                     repositoryName=repository,
-                    lifecyclePolicyText=policy,
+                    lifecyclePolicyText=lifecycle_policy,
                 )
                 logger.info("created lifecycle_policy on %s", repository)
-        except:  # noqa: E722
-            logger.error("failed to create lifecycle_policy on %s", repository)
+        except Exception as e:  # noqa: E722
+            logger.error("failed to create lifecycle_policy on %s: %s", repository, e)
+
+        try:
+            if repository_policy := get_valid_json_from_env("REPO_POLICY"):
+                client.set_repository_policy(
+                    registryId=account_id,
+                    repositoryName=repository,
+                    policyText=repository_policy,
+                    force=False,
+                )
+                logger.info("created repository_policy on %s", repository)
+        except Exception as e:  # noqa: E722
+            logger.error("failed to create repository_policy on %s: %s", repository, e)
 
     logger.info("lambda %s completed", context.function_name)

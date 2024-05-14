@@ -46,7 +46,7 @@ variable "image_tag_mutability" {
 
 variable "repo_lifecycle_policy" {
   type        = string
-  description = "ECR repository policy added to every repo Lambda creates."
+  description = "ECR repository lifecycle policy added to every repo Lambda creates."
   default     = <<-DEFAULT
     {
       "rules": [
@@ -65,6 +65,13 @@ variable "repo_lifecycle_policy" {
       ]
     }
   DEFAULT
+  nullable    = true
+}
+
+variable "repo_policy" {
+  type        = string
+  description = "ECR repository policy added to every repo Lambda creates."
+  default     = null
   nullable    = true
 }
 
