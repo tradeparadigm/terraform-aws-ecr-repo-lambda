@@ -47,6 +47,7 @@ resource "aws_lambda_function" "this" {
   role             = aws_iam_role.this.arn
   handler          = "handler.run"
   runtime          = "python3.12"
+  timeout          = 60
   source_code_hash = data.archive_file.this.output_base64sha256
 
   reserved_concurrent_executions = var.lambda_concurrency
