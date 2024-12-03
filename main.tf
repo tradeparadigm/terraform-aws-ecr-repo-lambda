@@ -47,7 +47,7 @@ resource "aws_lambda_function" "this" {
   role             = aws_iam_role.this.arn
   handler          = "handler.run"
   runtime          = "python3.12"
-  timeout          = 60
+  timeout          = var.lambda_timeout
   source_code_hash = data.archive_file.this.output_base64sha256
 
   reserved_concurrent_executions = var.lambda_concurrency
@@ -57,7 +57,7 @@ resource "aws_lambda_function" "this" {
       MANAGED_REPO_PREFIXES = join(",", var.managed_repo_prefixes)
       IMAGE_TAG_MUTABILITY  = var.image_tag_mutability
       REPO_LIFECYCLE_POLICY = var.repo_lifecycle_policy
-      REPO_POLICY           = var.repo_policy 
+      REPO_POLICY           = var.repo_policy
       REPO_TAGS             = jsonencode(local.repo_tags)
       REPO_SCAN_ON_PUSH     = tostring(var.repo_scan_on_push)
     }
