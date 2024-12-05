@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* make lambda timeout configurable and increase default to 10s
+
 ## 0.3.0 (May 14, 2024)
 
 * adding repo policy ([#5])
