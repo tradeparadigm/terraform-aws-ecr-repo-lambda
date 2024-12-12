@@ -1,12 +1,13 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## 0.3.1 (December 8, 2024)
 
-* make lambda timeout configurable and increase default to 10s
+* Extend timeout and make configurable by @gavinclarkeuk in https://github.com/tradeparadigm/terraform-aws-ecr-repo-lambda/pull/9
 
 ## 0.3.0 (May 14, 2024)
 
